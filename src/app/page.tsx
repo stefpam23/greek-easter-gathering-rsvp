@@ -83,8 +83,7 @@ export default function Home() {
             <p className="text-md md:text-lg">
               Greek Easter, or Pascha, is the most important religious feast in
               the Greek Orthodox calendar, commemorating the resurrection of Jesus
-              Christ. The red eggs symbolize the blood of Christ, and cracking them
-              represents his breaking free from the tomb.
+              Christ.
             </p>
           </div>
         </section>
