@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useState } from 'react';
@@ -88,13 +87,12 @@ export default function Home() {
           </div>
           <div className="mt-8">
             <h2 className="text-3xl font-semibold mb-4 text-center">
-              Traditional Activities &amp; Menu Highlights
+              Traditional Menu Highlights
             </h2>
             <ul className="list-disc list-inside">
               <li>Tsoureki (Sweet Bread)</li>
               <li>Red Egg Cracking</li>
               <li>Roast Lamb</li>
-              <li>Traditional Greek Dancing</li>
             </ul>
           </div>
           <div className="mt-8">
@@ -183,3 +181,4 @@ function RSVPForm() {
         </div>
     );
 }
+
