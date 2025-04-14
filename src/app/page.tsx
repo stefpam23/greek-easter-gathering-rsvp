@@ -50,14 +50,14 @@ export default function Home() {
             <div className="text-center">
               <h2 className="text-2xl font-semibold mb-2">Date &amp; Time</h2>
               <p>April 20, 2025</p>
-              <p>7:00 PM</p>
+              <p>12:00 PM</p>
             </div>
             <div className="text-center mt-4 md:mt-0">
               <h2 className="text-2xl font-semibold mb-2">Location</h2>
-              <p>123 Celebration Lane, Anytown</p>
+              <p>606 Wapato PL SE, Renton, WA</p>
               {/* Interactive Map Placeholder */}
               <a
-                href="https://www.google.com/maps"
+                href="https://maps.app.goo.gl/rUwzSoex8pKmLfWq5"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-300 hover:underline"
@@ -75,16 +75,6 @@ export default function Home() {
               <li>Red Egg Cracking</li>
               <li>Roast Lamb</li>
             </ul>
-          </div>
-          <div className="mt-8">
-            <h2 className="text-3xl font-semibold mb-4 text-center">
-              Cultural Significance
-            </h2>
-            <p className="text-md md:text-lg">
-              Greek Easter, or Pascha, is the most important religious feast in
-              the Greek Orthodox calendar, commemorating the resurrection of Jesus
-              Christ.
-            </p>
           </div>
         </section>
 
@@ -148,10 +138,6 @@ function RSVPForm() {
                     <div className="grid gap-2">
                         <Label htmlFor="requests">Special Requests</Label>
                         <Textarea id="requests" placeholder="Enter any special requests" />
-                    </div>
-                    <div className="flex items-center space-x-2">
-                        <Checkbox id="terms" />
-                        <Label htmlFor="terms">I agree to the terms and conditions</Label>
                     </div>
                 </CardContent>
                 <CardFooter className="flex justify-center">
