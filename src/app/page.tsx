@@ -1,16 +1,15 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Calendar } from "@/components/ui/calendar"
+import React, { useState, FormEvent } from 'react';
+import Link from 'next/link'; // Import Link
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Checkbox } from "@/components/ui/checkbox"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Separator } from "@/components/ui/separator"
-import { Icons } from '@/components/icons';
+import { useToast } from "@/hooks/use-toast"
+
 
 const dietaryOptions = [
     { value: "none", label: "No preferences" },
@@ -78,6 +77,13 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Link to RSVP List */}
+        <div className="text-center mb-4">
+           <Button asChild variant="outline">
+             <Link href="/rsvps">View Submitted RSVPs</Link>
+           </Button>
+        </div>
+
         {/* RSVP Section */}
         <section className="bg-white rounded-lg shadow-md p-4 md:p-8">
           <h2 className="text-3xl font-semibold mb-4 text-primary text-center">
@@ -91,8 +97,79 @@ export default function Home() {
 }
 
 function RSVPForm() {
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
+    const [attendees, setAttendees] = useState('1');
+    const [dietary, setDietary] = useState('none');
+    const [requests, setRequests] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const { toast } = useToast(); // Assuming you have a Toaster component set up in layout
+
+    const handleSubmit = async (e: FormEvent) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+
+        if (!name || !email || !phone || !attendees) {
+            toast({
+                title: "Error",
+                description: "Please fill out all required fields (Name, Email, Phone, Attendees).",
+                variant: "destructive",
+            });
+            setIsSubmitting(false);
+            return;
+        }
+
+        const rsvpData = {
+            name,
+            email,
+            phone,
+            attendees: parseInt(attendees, 10),
+            dietary,
+            requests,
+            submittedAt: new Date().toISOString(),
+        };
+
+        try {
+            const response = await fetch('/api/rsvp', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(rsvpData),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                toast({
+                    title: "Success!",
+                    description: "Your RSVP has been submitted.",
+                });
+                // Reset form
+                setName('');
+                setEmail('');
+                setPhone('');
+                setAttendees('1');
+                setDietary('none');
+                setRequests('');
+            } else {
+                throw new Error(result.message || 'Failed to submit RSVP');
+            }
+        } catch (error: any) {
+            console.error("RSVP Submission Error:", error);
+            toast({
+                title: "Error",
+                description: error.message || "Something went wrong. Please try again.",
+                variant: "destructive",
+            });
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
     return (
-        <div className="container mx-auto py-8">
+        <form onSubmit={handleSubmit}>
             <Card>
                 <CardHeader>
                     <CardTitle>RSVP to Greek Easter Celebration</CardTitle>
@@ -100,29 +177,53 @@ function RSVPForm() {
                 </CardHeader>
                 <CardContent className="grid gap-4">
                     <div className="grid gap-2">
-                        <Label htmlFor="name">Name</Label>
-                        <Input type="text" id="name" placeholder="Enter your name" />
+                        <Label htmlFor="name">Name *</Label>
+                        <Input
+                            type="text"
+                            id="name"
+                            placeholder="Enter your name"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            required
+                        />
                     </div>
                     <div className="grid gap-2">
-                        <Label htmlFor="email">Email</Label>
-                        <Input type="email" id="email" placeholder="Enter your email" />
+                        <Label htmlFor="email">Email *</Label>
+                        <Input
+                            type="email"
+                            id="email"
+                            placeholder="Enter your email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
                     </div>
                     <div className="grid gap-2">
-                        <Label htmlFor="phone">Contact Number</Label>
-                        <Input type="tel" id="phone" placeholder="Enter your contact number" />
+                        <Label htmlFor="phone">Contact Number *</Label>
+                        <Input
+                            type="tel"
+                            id="phone"
+                            placeholder="Enter your contact number"
+                            value={phone}
+                            onChange={(e) => setPhone(e.target.value)}
+                            required
+                         />
                     </div>
                     <div className="grid gap-2">
-                        <Label htmlFor="attendees">Number of Attendees</Label>
+                        <Label htmlFor="attendees">Number of Attendees *</Label>
                         <Input
                             type="number"
                             id="attendees"
                             placeholder="Enter number of attendees"
-                            defaultValue={1}
+                            value={attendees}
+                            onChange={(e) => setAttendees(e.target.value)}
+                            min="1"
+                            required
                         />
                     </div>
                     <div className="grid gap-2">
                         <Label htmlFor="dietary">Dietary Preferences</Label>
-                        <Select>
+                        <Select value={dietary} onValueChange={setDietary}>
                             <SelectTrigger id="dietary">
                                 <SelectValue placeholder="Select dietary preferences" />
                             </SelectTrigger>
@@ -137,13 +238,20 @@ function RSVPForm() {
                     </div>
                     <div className="grid gap-2">
                         <Label htmlFor="requests">Special Requests</Label>
-                        <Textarea id="requests" placeholder="Enter any special requests" />
+                        <Textarea
+                            id="requests"
+                            placeholder="Enter any special requests"
+                            value={requests}
+                            onChange={(e) => setRequests(e.target.value)}
+                        />
                     </div>
                 </CardContent>
                 <CardFooter className="flex justify-center">
-                    <Button>Submit RSVP</Button>
+                    <Button type="submit" disabled={isSubmitting}>
+                        {isSubmitting ? 'Submitting...' : 'Submit RSVP'}
+                    </Button>
                 </CardFooter>
             </Card>
-        </div>
+        </form>
     );
 }
