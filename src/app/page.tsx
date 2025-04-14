@@ -12,14 +12,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Separator } from "@/components/ui/separator"
 import { Icons } from '@/components/icons';
 
-const images = [
-  'https://picsum.photos/id/10/1920/1080',
-  'https://picsum.photos/id/20/1920/1080',
-  'https://picsum.photos/id/30/1920/1080',
-  'https://picsum.photos/id/40/1920/1080',
-  'https://picsum.photos/id/50/1920/1080',
-];
-
 const dietaryOptions = [
     { value: "none", label: "No preferences" },
     { value: "vegetarian", label: "Vegetarian" },
@@ -30,24 +22,13 @@ const dietaryOptions = [
 ];
 
 export default function Home() {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
-  React.useEffect(() => {
-    const intervalId = setInterval(() => {
-      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, 5000);
-
-    return () => clearInterval(intervalId);
-  }, []);
-
   return (
     <div className="relative min-h-screen bg-background">
-      {/* Background Image Gallery */}
+      {/* Static Background Image */}
       <div
         className="absolute inset-0 overflow-hidden"
         style={{
-          transition: 'background-image 1s ease-in-out',
-          backgroundImage: `url('${images[currentImageIndex]}')`,
+          backgroundImage: `url('https://picsum.photos/id/10/1920/1080')`, // Replace with desired image URL
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           filter: 'blur(5px) brightness(0.5)',
@@ -181,4 +162,3 @@ function RSVPForm() {
         </div>
     );
 }
-
