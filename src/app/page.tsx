@@ -15,6 +15,7 @@ const dietaryOptions = [
     { value: "none", label: "No preferences" },
     { value: "vegetarian", label: "Vegetarian" },
     { value: "vegan", label: "Vegan" },
+    { value: "seafood", label: "Seafood" },
     { value: "gluten-free", label: "Gluten-Free" },
     { value: "dairy-free", label: "Dairy-Free" },
     { value: "nut-free", label: "Nut-Free" },
@@ -110,10 +111,11 @@ function RSVPForm() {
         e.preventDefault();
         setIsSubmitting(true);
 
-        if (!name || !email || !phone || !attendees) {
+        // Updated validation: only name, email, and attendees are mandatory
+        if (!name || !email || !attendees) {
             toast({
                 title: "Error",
-                description: "Please fill out all required fields (Name, Email, Phone, Attendees).",
+                description: "Please fill out all required fields (Name, Email, Attendees).",
                 variant: "destructive",
             });
             setIsSubmitting(false);
@@ -123,7 +125,7 @@ function RSVPForm() {
         const rsvpData = {
             name,
             email,
-            phone,
+            phone, // Phone is included but not required for validation
             attendees: parseInt(attendees, 10),
             dietary,
             requests,
@@ -144,7 +146,7 @@ function RSVPForm() {
             if (response.ok) {
                 toast({
                     title: "Success!",
-                    description: "Your RSVP has been submitted.",
+                    description: "Your RSVP has been submitted. Check your email for a calendar invite!", // Updated toast message
                 });
                 // Reset form
                 setName('');
@@ -199,14 +201,14 @@ function RSVPForm() {
                         />
                     </div>
                     <div className="grid gap-2">
-                        <Label htmlFor="phone">Contact Number *</Label>
+                        <Label htmlFor="phone">Contact Number</Label> {/* Removed asterisk */}
                         <Input
                             type="tel"
                             id="phone"
-                            placeholder="Enter your contact number"
+                            placeholder="Enter your contact number (Optional)" // Updated placeholder
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
-                            required
+                            // Removed required attribute
                          />
                     </div>
                     <div className="grid gap-2">
@@ -248,7 +250,7 @@ function RSVPForm() {
                 </CardContent>
                 <CardFooter className="flex justify-center">
                     <Button type="submit" disabled={isSubmitting}>
-                        {isSubmitting ? 'Submitting...' : 'Submit RSVP'}
+                        {isSubmitting ? 'Submitting...' : 'Submit RSVP & Get Calendar Invite'} {/* Updated Button Text */}
                     </Button>
                 </CardFooter>
             </Card>
