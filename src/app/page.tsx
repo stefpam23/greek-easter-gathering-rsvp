@@ -41,15 +41,14 @@ export default function Home() {
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 text-center">
             Greek Easter Celebration
           </h1>
-          <p className="text-lg md:text-xl text-center">
-            Join us for a traditional Greek Easter celebration filled with joy,
-            family, and cultural richness.
+          <p className="text-lg md:text-m text-center">
+          Χριστὸς ἀνέστη! Join us for Greek Orthodox Easter celebration featuring traditional lamb roast and festive Greek cuisine to celebrate faith, food, and family at Sonia and Niko's house. We'll be serving traditional Easter dishes including oven-roasted lamb, red-dyed eggs, tsoureki bread, tzaziki and other dips, greek coffee, and a variety of Greek appetizers and desserts.
           </p>
           <div className="flex flex-col md:flex-row justify-around mt-8">
             <div className="text-center">
               <h2 className="text-2xl font-semibold mb-2">Date &amp; Time</h2>
               <p>April 20, 2025</p>
-              <p>12:00 PM</p>
+              <p>1:00 PM</p>
             </div>
             <div className="text-center mt-4 md:mt-0">
               <h2 className="text-2xl font-semibold mb-2">Location</h2>
@@ -73,6 +72,7 @@ export default function Home() {
               <li>Tsoureki (Sweet Bread)</li>
               <li>Red Egg Cracking</li>
               <li>Roast Lamb</li>
+              <li>And More...</li>
             </ul>
           </div>
         </section>
