@@ -10,7 +10,6 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useToast } from "@/hooks/use-toast"
 
-
 const dietaryOptions = [
     { value: "none", label: "No preferences" },
     { value: "vegetarian", label: "Vegetarian" },
@@ -143,6 +142,10 @@ function RSVPForm() {
             const result = await response.json();
 
             if (response.ok) {
+                // Generate and trigger download of iCal file
+                const calendarInvite = generateCalendarInvite(rsvpData);
+                downloadCalendarInvite(calendarInvite, email);
+
                 toast({
                     title: "Success!",
                     description: "Your RSVP has been submitted. Check your email for a calendar invite!", // Updated toast message
@@ -168,6 +171,46 @@ function RSVPForm() {
             setIsSubmitting(false);
         }
     };
+
+    // Function to generate the calendar invite (.ics) content
+    const generateCalendarInvite = (rsvpData: any) => {
+        const eventStartTime = "20250420T130000"; // April 20, 2025 1:00 PM - Format: YYYYMMDDTHHMMSS
+        const eventEndTime = "20250420T170000";   // April 20, 2025 5:00 PM
+        const eventLocation = "606 Wapato PL SE, Renton, WA";
+        const eventDescription = `Join us for Greek Orthodox Easter celebration! Featuring traditional lamb roast and festive Greek cuisine.`;
+
+        const calendarInvite = `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Your Organization//Your App//EN
+CALSCALE:GREGORIAN
+BEGIN:VEVENT
+UID:${Math.random().toString()}@example.com
+DTSTART:${eventStartTime}
+DTEND:${eventEndTime}
+SUMMARY:Greek Easter Celebration
+LOCATION:${eventLocation}
+DESCRIPTION:${eventDescription}
+ORGANIZER;CN=Sonia and Niko:mailto:sonia.niko@example.com
+ATTENDEE;RSVP=TRUE;CN=${rsvpData.name}:mailto:${rsvpData.email}
+END:VEVENT
+END:VCALENDAR`;
+
+        return calendarInvite;
+    };
+
+    // Function to trigger the download of the calendar invite file
+    const downloadCalendarInvite = (calendarInvite: string, email: string) => {
+        const blob = new Blob([calendarInvite], { type: 'text/calendar' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `GreekEaster_Invite_${email}.ics`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    };
+
 
     return (
         <form onSubmit={handleSubmit}>
@@ -256,5 +299,3 @@ function RSVPForm() {
         </form>
     );
 }
-
-    
