@@ -8,6 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
 interface Rsvp {
+    id: string; // Include the document ID
     name: string;
     email: string;
     phone: string;
@@ -32,8 +33,6 @@ export default function RsvpListPage() {
                     throw new Error('Failed to fetch RSVPs');
                 }
                 const data: Rsvp[] = await response.json();
-                // Sort by submission date, newest first
-                data.sort((a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime());
                 setRsvps(data);
             } catch (err: any) {
                 console.error("Error fetching RSVPs:", err);
@@ -97,3 +96,5 @@ export default function RsvpListPage() {
         </div>
     );
 }
+
+    

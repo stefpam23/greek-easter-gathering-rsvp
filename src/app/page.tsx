@@ -129,7 +129,6 @@ function RSVPForm() {
             attendees: parseInt(attendees, 10),
             dietary,
             requests,
-            submittedAt: new Date().toISOString(),
         };
 
         try {
@@ -257,3 +256,5 @@ function RSVPForm() {
         </form>
     );
 }
+
+    
